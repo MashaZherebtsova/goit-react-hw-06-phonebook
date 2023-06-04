@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { stateReducer } from './createSlise';
+import { persistedReducer } from './createSlise';
 import {
   persistStore,
   FLUSH,
@@ -9,18 +9,19 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
+import { filterSlice } from './filterSlice';
 
 export const store = configureStore({
   reducer: {
-    state: stateReducer,
+    contacts: persistedReducer,
+    filter: filterSlice.reducer,
   },
-    middleware: getDefaultMiddleware =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
-      }),
-  },
-);
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
 
 export const persistor = persistStore(store);
